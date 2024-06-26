@@ -7,8 +7,6 @@ resource "helm_release" "kafka" {
   values = [
     <<EOF
         replicaCount: 3
-        zookeeper:
-        replicaCount: 3
         resources:
         requests:
             memory: "1Gi"
