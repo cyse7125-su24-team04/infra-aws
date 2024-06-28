@@ -6,15 +6,35 @@ resource "helm_release" "kafka" {
 
   values = [
     <<EOF
-        replicaCount: 3
-        resources:
+    listeners:
+      client:
+        protocol: PLAINTEXT
+      controller:
+        protocol: PLAINTEXT
+      interbroker:
+        protocol: PLAINTEXT  
+    provisioning:
+      enabled: true
+      replicationFactor: 3
+      numPartitions: 3
+    controller:
+      persistence:
+        size: 1Gi
+      initContainerResources:
         requests:
-            memory: "1Gi"
-            cpu: "500m"
+          memory: "50Mi"
+          cpu: "50m"
         limits:
-            memory: "2Gi"
-            cpu: "1"
-        EOF
+          memory: "100Mi"
+          cpu: "100m"
+      resources:
+        requests:
+          memory: "500Mi"
+          cpu: "100m"
+        limits:
+          memory: "850Mi"
+          cpu: "1"
+    EOF
   ]
 
   # depends_on =  [kubernetes_namespace.kafka]
